@@ -1,0 +1,136 @@
+Redux
+
+
+props drilling - the process of sending data from the grand parent  to the last child  (one parent to child ,that child to another child) is called props drilling    
+
+
+Dependency  will increase when props drilling .
+
+Props drilling will increase coupling  ( 
+
+
+
+Store : to hold all state available for components
+
+Components : can select state from store can not update the state directly
+
+Action : to update state component will dispatch and action where define the logic
+
+Reducer :response from action will be passed to reducer automatically and reducer can directly update state in the store 
+
+Only reducer can update value in store
+
+
+To use Redux :  install two npm  ,then
+
+ 1) create a file , store 
+
+            nside the file 
+ 
+         using configureStore  : configureStore is a redux tool kit methode 
+
+          const store=configureStore({
+                  reducer:{}
+
+                   })
+
+2-  App.js is the root , its selector is in  index.html .wrap the selector with Provider tag :-react redux
+
+              <Provider>
+
+                 <App />
+              </Provider>
+
+
+3- Share the store through openging tag of provider 
+   a- import the store 
+   b- assign the store to another variable named store 
+
+
+       <Provider store ={store}>
+
+            <App />
+       </Provider>
+
+4- Create slice 
+      slice is used to create reducer and action in same time
+
+  a- inside the slice if there is a state ,mention its initial value 
+
+        defining initial value
+
+        const initialState={
+            value:0
+           }
+
+
+  b- its name 
+
+  c-  reducer and the  actions to be done
+
+        increment:(state)=>{
+            state.value+=1
+        },
+        decrement:(state)=>{
+            state.value-=1
+        },
+        reset:(state)=>{
+            state.value=0
+        }
+
+------------------------------------------
+
+      const initialState={                              ------ defining state
+    value:0
+}
+
+
+ export const counterSlice=createSlice({                ---create slice is a predefined methode
+    name:'counter',                                    --------- name
+    initialState,                                      ---------initial state
+    reducers:{                                         
+                                                        
+        increment:(state)=>{                            
+            state.value+=1                            -----------actions
+        },
+        decrement:(state)=>{
+            state.value-=1
+        },
+        reset:(state)=>{
+            state.value=0
+        }
+    }
+})
+
+export const{increment,decrement,reset}=counterSlice.actions   ---exporting it as destructerd .increment, decrement and reset are inside counter slice   (.) the dot action is used because those three are actions
+ 
+ 5 - in the store file 
+      inside the reducer  assign counterSlice to a variable named counterReducer,import it 
+      when cursor is pointed at counterSlice it will display the actions
+
+6 , to access the state in the store use a hook called useselector,in counter.jsx
+
+
+    const count=useSelector((state)=>state.counterReducer.value)
+       
+       to show the value
+       
+         the state is assigned to variable through useSelector ( variable: count )
+
+        state is in js format to show it in jsx use a curly brace  and mention the variabl name in the place to be displayed 
+
+
+ 7 , to dispatch action  = useDispatch    
+
+    const dispatch=useDispatch()   - above return ,then
+
+      inside every button dispatch the actions 
+
+
+                <button onClick={()=>dispatch(increment())} className='btn btn-primary'>Increment</button>
+                <button onClick={()=>dispatch(reset())} className='btn btn-danger ms-5'>Rest</button>
+                <button onClick={()=>dispatch(decrement())} className='btn btn-warning ms-5'>Decrement</button>
+
+
+
+⛔  when a action is occured in the component , the action will go the reducer  and the reducer will take the action (increment/decrement/reset)  it will show the result
